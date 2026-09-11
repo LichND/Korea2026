@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="vi" class="max-w-full overflow-x-hidden">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lịch Trình Du Lịch Busan 5N5Đ | Sắc Việt Travel 2026</title>
+  <!-- Google Fonts & Tailwind CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            busan: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#035485',
+              800: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans pb-20 md:pb-12 antialiased max-w-full overflow-x-hidden selection:bg-sky-500 selection:text-white">
+
+  <!-- TOP CLOCK & SYNC BAR -->
+  <header class="bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 text-white sticky top-0 z-40 shadow-lg border-b border-sky-800/30 backdrop-blur-md bg-opacity-95">
+    <div class="max-w-7xl mx-auto px-2.5 py-2 sm:px-4 sm:py-3">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+        
+        <!-- Brand & Group Toggle -->
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="p-1.5 sm:p-2 bg-sky-500/20 text-sky-400 rounded-lg sm:rounded-xl border border-sky-400/30 shrink-0">
+              <i data-lucide="plane-takeoff" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            </span>
+            <div>
+              <div class="flex items-center gap-1.5">
+                <h1 class="font-extrabold text-sm sm:text-lg md:text-xl tracking-tight text-white">BUSAN 5N5Đ</h1>
+                <span class="px-1.5 py-0.5 text-[9px] sm:text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-400/30 rounded-full shrink-0">Sắc Việt</span>
+              </div>
+              <p class="text-[10px] text-sky-200/80 hidden sm:block">Chương Trình Tham Quan Hàn Quốc Trọn Gói 4★</p>
+            </div>
+          </div>
+
+          <!-- Group Select Toggle (HÀ NỘI / SÀI GÒN) -->
+          <div class="flex items-center bg-slate-800/80 p-0.5 sm:p-1 rounded-lg border border-slate-700 shrink-0">
+            <button id="btn-group-all" class="group-btn active text-[10px] sm:text-xs font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all">Tất cả</button>
+            <button id="btn-group-hn" class="group-btn text-[10px] sm:text-xs font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all flex items-center gap-1">
+              <span>🏛️ HN</span>
+            </button>
+            <button id="btn-group-sg" class="group-btn text-[10px] sm:text-xs font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all flex items-center gap-1">
+              <span>🌴 SG</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- LIVE CLOCKS -->
+        <div class="grid grid-cols-3 gap-1 sm:gap-3 text-center bg-slate-950/70 p-1.5 sm:p-2 rounded-xl border border-slate-800">
+          <div class="px-0.5">
+            <div class="text-[9px] sm:text-[10px] text-sky-300 uppercase tracking-wider font-semibold truncate">
+              🇰🇷 Busan (KST)
+            </div>
+            <div id="clock-busan" class="font-mono text-[11px] sm:text-sm font-bold text-sky-400">00:00:00</div>
+          </div>
+          <div class="px-0.5 border-x border-slate-800">
+            <div class="text-[9px] sm:text-[10px] text-amber-300 uppercase tracking-wider font-semibold truncate">
+              🇻🇳 VN (ICT)
+            </div>
+            <div id="clock-vn" class="font-mono text-[11px] sm:text-sm font-bold text-amber-400">00:00:00</div>
+          </div>
+          <div class="px-0.5">
+            <div class="text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-wider font-semibold truncate">
+              Local Browser
+            </div>
+            <div id="clock-local" class="font-mono text-[11px] sm:text-sm font-bold text-slate-200">00:00:00</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- LIVE TRIP SYNC & TIME SIMULATION BAR -->
+      <div class="mt-2 pt-2 border-t border-slate-800/80 flex flex-col lg:flex-row items-stretch lg:items-center justify-between text-[11px] gap-1.5">
+        <div id="live-status-container" class="flex items-center gap-1.5 overflow-hidden w-full lg:w-auto py-0.5">
+          <span class="relative flex h-2.5 w-2.5 shrink-0">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+          </span>
+          <span class="font-semibold text-slate-300 shrink-0 text-[10px] sm:text-xs">Trạng thái:</span>
+          <span id="live-status-badge" class="px-2 py-0.5 rounded text-white font-bold bg-amber-600 truncate text-[10px] sm:text-xs max-w-full">Đang tính toán...</span>
+        </div>
+
+        <!-- SIMULATOR CONTROL -->
+        <div class="flex items-center justify-between sm:justify-end gap-1.5 bg-slate-900/90 px-2 py-1.5 rounded-lg border border-slate-700/80 w-full lg:w-auto">
+          <div class="flex items-center gap-1 text-slate-300 shrink-0">
+            <i data-lucide="sliders" class="w-3 h-3 text-amber-400"></i>
+            <span class="font-medium text-[10px] sm:text-[11px]">Giả lập:</span>
+          </div>
+          <div class="flex items-center gap-1 max-w-[70%] sm:max-w-none">
+            <select id="sim-day" class="bg-slate-800 text-white text-[10px] sm:text-xs px-1.5 py-1 rounded border border-slate-600 focus:outline-none max-w-[150px] sm:max-w-[210px] truncate">
+              <option value="real">⏰ Đồng hồ thực tế</option>
+              <option value="2025-09-21">Đêm 1 - 21/09 (Khởi hành)</option>
+              <option value="2025-09-22" selected>Ngày 1 - 22/09 (Gamcheon)</option>
+              <option value="2025-09-23">Ngày 2 - 23/09 (Running Man)</option>
+              <option value="2025-09-24">Ngày 3 - 24/09 (Sky Capsule)</option>
+              <option value="2025-09-25">Ngày 4 - 25/09 (Hái Nho BBQ)</option>
+              <option value="2025-09-26">Ngày 5 - 26/09 (Trở về Việt Nam)</option>
+            </select>
+            <input type="time" id="sim-time" value="10:00" class="bg-slate-800 text-white text-[10px] sm:text-xs px-1.5 py-1 rounded border border-slate-600 focus:outline-none w-16 sm:w-auto">
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-2.5 sm:px-4 py-3 sm:py-5">
+
+    <!-- ⚡ IMMEDIATE LIVE ACTION HERO DASHBOARD -->
+    <div id="live-action-hero" class="mb-5 space-y-3">
+      
+      <!-- CURRENTLY HAPPENING NOW & UPCOMING NEXT GRID -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        
+        <!-- NOW CARD -->
+        <div class="bg-gradient-to-br from-amber-500 via-orange-600 to-amber-700 text-white p-4 sm:p-5 rounded-2xl shadow-lg relative overflow-hidden border border-amber-400/40">
+          <div class="flex justify-between items-start gap-2 border-b border-amber-400/30 pb-2 mb-2.5">
+            <div class="flex items-center gap-1.5">
+              <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-90"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+              </span>
+              <span class="text-xs uppercase font-extrabold tracking-wider text-amber-100">BÂY GIỜ • ĐANG DIỄN RA</span>
+            </div>
+            <span id="hero-now-tag" class="px-2 py-0.5 bg-black/20 text-amber-100 rounded-full text-[10px] font-bold font-mono">10:00 - 11:30</span>
+          </div>
+
+          <h3 id="hero-now-title" class="text-lg sm:text-xl font-extrabold text-white leading-snug">
+            Làng Bích Họa Gamcheon
+          </h3>
+          <p id="hero-now-desc" class="text-xs text-amber-100/90 mt-1 line-clamp-2 leading-relaxed">
+            Check-in Gamcheon Culture Village - làng nghệ thuật rực rỡ sắc màu xếp tầng trên sườn đồi hướng ra biển.
+          </p>
+
+          <div class="mt-3 pt-2 border-t border-amber-400/30 flex items-center justify-between text-[11px] text-amber-100">
+            <span id="hero-now-day" class="font-bold flex items-center gap-1">
+              <span>🗓️</span> Ngày 1 (22/09/2025)
+            </span>
+            <span class="font-semibold underline cursor-pointer" onclick="document.querySelector('.nav-tab[data-tab=\'tab-day-1\']').click()">Chi tiết timeline ↓</span>
+          </div>
+        </div>
+
+        <!-- NEXT UP CARD -->
+        <div class="bg-gradient-to-br from-slate-900 via-sky-950 to-slate-900 text-white p-4 sm:p-5 rounded-2xl shadow-lg border border-sky-800/40 space-y-2">
+          <div class="flex justify-between items-start gap-2 border-b border-slate-800 pb-2 mb-1">
+            <div class="flex items-center gap-1.5 text-sky-400 font-bold text-xs uppercase tracking-wider">
+              <i data-lucide="fast-forward" class="w-3.5 h-3.5"></i>
+              <span>TIẾP THEO HÔM NAY</span>
+            </div>
+            <span id="hero-next-time" class="px-2 py-0.5 bg-sky-500/20 text-sky-300 rounded font-mono text-[10px] font-bold">12:00</span>
+          </div>
+
+          <h4 id="hero-next-title" class="text-base sm:text-lg font-bold text-white leading-snug">
+            Bữa Trưa Cá Nướng Hàn Quốc
+          </h4>
+          <p id="hero-next-desc" class="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+            Ăn trưa thực đơn Cá nướng truyền thống tại nhà hàng Dalbityegueungodeu thơm ngon.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- TODAY'S MEAL QUICK SUMMARY ROW -->
+      <div id="hero-today-meals" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 text-xs cursor-pointer hover:border-amber-400 hover:shadow-md transition" onclick="document.querySelector('.nav-tab[data-tab=\'tab-menu\']').click()">
+        <div class="font-bold text-slate-800 flex items-center justify-between sm:justify-start gap-1.5 shrink-0 border-b sm:border-b-0 pb-1 sm:pb-0 border-slate-100">
+          <div class="flex items-center gap-1.5">
+            <span class="p-1 bg-amber-100 text-amber-800 rounded">🍽️</span>
+            <span>Thực Đơn Hôm Nay:</span>
+          </div>
+          <span class="text-[10px] text-amber-700 font-semibold underline sm:hidden">Xem bảng 5 ngày →</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2 w-full text-[11px]">
+          <div class="bg-slate-50 p-1.5 rounded border border-slate-200 hover:bg-amber-50">
+            <span class="font-bold text-sky-700 block">SÁNG</span>
+            <span id="meal-today-bf" class="text-slate-700 truncate block">Canh sườn bò</span>
+          </div>
+          <div class="bg-slate-50 p-1.5 rounded border border-slate-200 hover:bg-amber-50">
+            <span class="font-bold text-amber-700 block">TRƯA</span>
+            <span id="meal-today-lunch" class="text-slate-700 truncate block">Cá nướng Dalbit</span>
+          </div>
+          <div class="bg-slate-50 p-1.5 rounded border border-slate-200 hover:bg-amber-50">
+            <span class="font-bold text-emerald-700 block">TỐI</span>
+            <span id="meal-today-dinner" class="text-slate-700 truncate block">Nakgopsae Gaemijib</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MAIN NAVIGATION TABS -->
+    <div class="flex items-center gap-1.5 overflow-x-auto pb-2 mb-5 scrollbar-none sticky top-12 sm:top-16 z-30 bg-slate-50/90 backdrop-blur-md pt-1.5 max-w-full">
+      <button class="nav-tab active" data-tab="tab-all">
+        <i data-lucide="layers" class="w-3.5 h-3.5"></i> Tất Cả
+      </button>
+      <button class="nav-tab" data-tab="tab-day-0">
+        <i data-lucide="moon" class="w-3.5 h-3.5"></i> Đêm 1 (21/09)
+      </button>
+      <button class="nav-tab" data-tab="tab-day-1">
+        <i data-lucide="sun" class="w-3.5 h-3.5"></i> Ngày 1 (22/09)
+      </button>
+      <button class="nav-tab" data-tab="tab-day-2">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Ngày 2 (23/09)
+      </button>
+      <button class="nav-tab" data-tab="tab-day-3">
+        <i data-lucide="camera" class="w-3.5 h-3.5"></i> Ngày 3 (24/09)
+      </button>
+      <button class="nav-tab" data-tab="tab-day-4">
+        <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Ngày 4 (25/09)
+      </button>
+      <button class="nav-tab" data-tab="tab-day-5">
+        <i data-lucide="plane-landing" class="w-3.5 h-3.5"></i> Ngày 5 (26/09)
+      </button>
+      <button class="nav-tab bg-amber-500/10 text-amber-800 border-amber-300 hover:bg-amber-500 hover:text-white" data-tab="tab-menu">
+        <i data-lucide="utensils-crossed" class="w-3.5 h-3.5"></i> Thực Đơn
+      </button>
+      <button class="nav-tab bg-slate-800 text-white border-slate-700 hover:bg-slate-900" data-tab="tab-info">
+        <i data-lucide="info" class="w-3.5 h-3.5"></i> Giá Tour & Chi Tiết
+      </button>
+    </div>
+
+    <!-- CONTENT SECTIONS -->
+    <div id="tab-content-area" class="space-y-6 sm:space-y-10">
+
+      <!-- SINGLE UNBROKEN CONTINUOUS TIMELINE PANE -->
+      <section id="tab-timeline-main" class="tab-pane active-pane space-y-6">
+        <div id="continuous-timeline" class="timeline-wrapper space-y-4">
+
+          <!-- ================= DAY 0 NODE (21/09) ================= -->
+          <div class="timeline-day-node" data-day="day-0" data-date="2025-09-21">
+            <div class="timeline-badge">ĐÊM 1</div>
+            <div class="bg-gradient-to-r from-indigo-900 to-slate-900 text-white p-3.5 sm:p-4 rounded-xl shadow border-l-4 border-indigo-500">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-extrabold text-indigo-300 uppercase tracking-wider">ĐÊM 01 • CHỦ NHẬT 21/09/2025</span>
+                <span class="px-2 py-0.5 bg-indigo-500/30 text-indigo-200 rounded-full text-[10px] font-semibold">✈️ Bay Đêm Busan</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DAY 0 EVENTS -->
+          <div class="timeline-item group-hn-card" data-day="day-0" data-date="2025-09-21" data-time-start="21:00" data-time-end="23:59">
+            <div class="timeline-badge bg-indigo-700">21:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">🏛️ Nhóm Hà Nội - Đón Ra Nội Bài (VN428)</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-sky-100 text-sky-800 font-mono rounded font-bold shrink-0">01:15 - 07:05</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                <strong>21:00:</strong> HDV đón đoàn tại <strong>ROX 54A Nguyễn Chí Thanh</strong> ra Nội Bài. Cất cánh VN428 lúc 01:15 rạng sáng 22/09. Nghỉ đêm trên máy bay.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item group-sg-card" data-day="day-0" data-date="2025-09-21" data-time-start="22:00" data-time-end="23:59">
+            <div class="timeline-badge bg-emerald-700">22:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">🌴 Nhóm Sài Gòn - Tân Sơn Nhất (VN422)</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-emerald-100 text-emerald-800 font-mono rounded font-bold shrink-0">01:10 - 07:50</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                <strong>22:00:</strong> HDV đón tại <strong>Cột 10, Lầu 2 Ga Quốc Tế Tân Sơn Nhất</strong>. Cất cánh VN422 lúc 01:10 rạng sáng 22/09. Nghỉ đêm trên máy bay.
+              </p>
+            </div>
+          </div>
+
+          <!-- ================= DAY 1 NODE (22/09) ================= -->
+          <div class="timeline-day-node" data-day="day-1" data-date="2025-09-22">
+            <div class="timeline-badge">NGÀY 1</div>
+            <div class="bg-gradient-to-r from-sky-800 to-blue-900 text-white p-3.5 sm:p-4 rounded-xl shadow border-l-4 border-sky-400">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-extrabold text-sky-300 uppercase tracking-wider">NGÀY 01 • THỨ HAI 22/09/2025</span>
+                <span class="px-2 py-0.5 bg-sky-500/30 text-sky-100 rounded-full text-[10px] font-semibold">🎨 Gamcheon & Jagalchi</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DAY 1 EVENTS -->
+          <div class="timeline-item" data-day="day-1" data-date="2025-09-22" data-time-start="08:00" data-time-end="09:30">
+            <div class="timeline-badge bg-sky-600">08:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Đến Busan - Ăn Sáng Canh Sườn Bò</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-amber-100 text-amber-800 rounded font-semibold shrink-0">Bữa Sáng</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Xe đón tại sân bay Busan đưa ăn <strong>Canh sườn bò (Gonghanggalbitang)</strong> tiếp năng lượng.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-1" data-date="2025-09-22" data-time-start="10:00" data-time-end="11:30">
+            <div class="timeline-badge bg-sky-600">10:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Làng Bích Họa Gamcheon</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-sky-100 text-sky-800 rounded font-semibold shrink-0">Tham Quan</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Check-in <strong>Gamcheon Culture Village</strong> - làng nghệ thuật rực rỡ sắc màu xếp tầng trên sườn đồi.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-1" data-date="2025-09-22" data-time-start="12:00" data-time-end="13:30">
+            <div class="timeline-badge bg-sky-600">12:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Bữa Trưa Cá Nướng Hàn Quốc</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-amber-100 text-amber-800 rounded font-semibold shrink-0">Bữa Trưa</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Ăn trưa thực đơn <strong>Cá nướng truyền thống</strong> tại nhà hàng Dalbityegueungodeu.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-1" data-date="2025-09-22" data-time-start="13:30" data-time-end="15:00">
+            <div class="timeline-badge bg-sky-600">13:30</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Chợ Cá Jagalchi & Chợ Gukje</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-indigo-100 text-indigo-800 rounded font-semibold shrink-0">Trải Nghiệm</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Khám phá chợ hải sản <strong>Jagalchi</strong> và <strong>Chợ Gukje</strong>, tự do mua sắm & thử món ăn đường phố.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-1" data-date="2025-09-22" data-time-start="15:00" data-time-end="18:00">
+            <div class="timeline-badge bg-sky-600">15:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Nhận Phòng Haeundae Blue Story</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-emerald-100 text-emerald-800 rounded font-semibold shrink-0">Nghỉ Ngơi</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Về nhận phòng tại <strong>HAEUNDAE BLUE STORY HOTEL BUSAN (4★)</strong>, nghỉ ngơi lấy sức.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-1" data-date="2025-09-22" data-time-start="18:00" data-time-end="20:00">
+            <div class="timeline-badge bg-sky-600">18:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Tối Lẩu Bạch Tuộc Nakgopsae</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-amber-100 text-amber-800 rounded font-semibold shrink-0">Bữa Tối</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Ăn tối tại nhà hàng <strong>Gaemijib</strong> với món đặc sản <strong>Nakgopsae</strong> xào cay đậm đà.
+              </p>
+            </div>
+          </div>
+
+          <!-- ================= DAY 2 NODE (23/09) ================= -->
+          <div class="timeline-day-node" data-day="day-2" data-date="2025-09-23">
+            <div class="timeline-badge">NGÀY 2</div>
+            <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-3.5 sm:p-4 rounded-xl shadow border-l-4 border-amber-400">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-extrabold text-amber-300 uppercase tracking-wider">NGÀY 02 • THỨ BA 23/09/2025</span>
+                <span class="px-2 py-0.5 bg-amber-500/30 text-amber-100 rounded-full text-[10px] font-semibold">👑 Tiệc Hải Sản 4★</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DAY 2 EVENTS -->
+          <div class="timeline-item" data-day="day-2" data-date="2025-09-23" data-time-start="06:00" data-time-end="08:30">
+            <div class="timeline-badge bg-blue-600">06:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <h4 class="font-bold text-slate-900 text-sm sm:text-base">Ăn Sáng Buffet Tại Khách Sạn</h4>
+              <p class="text-xs text-slate-600 mt-1">Điểm tâm buffet tại khách sạn Haeundae Blue Story (06:00 - 08:30).</p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-2" data-date="2025-09-23" data-time-start="10:00" data-time-end="11:30">
+            <div class="timeline-badge bg-blue-600">10:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Running Man Experience Busan</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-purple-100 text-purple-800 rounded font-semibold shrink-0">Trải Nghiệm</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Vui chơi tương tác theo show truyền hình thực tế ăn khách <strong>Running Man</strong>.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-2" data-date="2025-09-23" data-time-start="12:00" data-time-end="13:30">
+            <div class="timeline-badge bg-blue-600">12:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Ăn Trưa Buffet Lẩu Shabu-Shabu</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-amber-100 text-amber-800 rounded font-semibold shrink-0">Bữa Trưa</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Buffet lẩu <strong>Shabu - Shabu</strong> thịt bò nấm tươi tại nhà hàng Shabu Aejak.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-2" data-date="2025-09-23" data-time-start="14:00" data-time-end="17:30">
+            <div class="timeline-badge bg-blue-600">14:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm space-y-2">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Chiều Trải Nghiệm Tùy Chọn</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-sky-100 text-sky-800 rounded font-semibold shrink-0">Tự Chọn</span>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                <div class="p-2.5 bg-sky-50 rounded-lg border border-sky-200">
+                  <span class="font-bold text-sky-900">Opt 1: Sauna SPA Land Centum</span>
+                  <p class="text-slate-600 mt-0.5 text-[11px]">Xông hơi Sauna lớn & sang bậc nhất Châu Á.</p>
+                </div>
+                <div class="p-2.5 bg-indigo-50 rounded-lg border border-indigo-200">
+                  <span class="font-bold text-indigo-900">Opt 2: Museum One Busan</span>
+                  <p class="text-slate-600 mt-0.5 text-[11px]">Nghệ thuật ánh sáng kĩ thuật số hiện đại.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-2" data-date="2025-09-23" data-time-start="18:30" data-time-end="22:30">
+            <div class="timeline-badge bg-amber-600">18:30</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-amber-300 shadow-md">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-amber-900 text-sm sm:text-base">Đại Tiệc Hải Sản Ven Biển Nayeonyine</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-amber-500 text-white rounded font-semibold shrink-0">Tiệc Đêm</span>
+              </div>
+              <p class="text-xs text-slate-700 mt-1.5">
+                Bạch tuộc sống Sannakji, Gaebul, 2 tôm nướng/khách, Bánh xèo hải sản, Sashimi, Mì hải sản & Lẩu cá hầm (+ 2 Soju, 4 Bia, 3 Nước ngọt/bàn).
+              </p>
+            </div>
+          </div>
+
+          <!-- ================= DAY 3 NODE (24/09) ================= -->
+          <div class="timeline-day-node" data-day="day-3" data-date="2025-09-24">
+            <div class="timeline-badge">NGÀY 3</div>
+            <div class="bg-gradient-to-r from-teal-900 to-sky-900 text-white p-3.5 sm:p-4 rounded-xl shadow border-l-4 border-teal-400">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-extrabold text-teal-300 uppercase tracking-wider">NGÀY 03 • THỨ TƯ 24/09/2025</span>
+                <span class="px-2 py-0.5 bg-teal-500/30 text-teal-100 rounded-full text-[10px] font-semibold">🚃 Sky Capsule & Chùa Biển</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DAY 3 EVENTS -->
+          <div class="timeline-item" data-day="day-3" data-date="2025-09-24" data-time-start="06:00" data-time-end="08:30">
+            <div class="timeline-badge bg-teal-600">06:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <h4 class="font-bold text-slate-900 text-sm sm:text-base">Ăn Sáng Buffet Khách Sạn</h4>
+              <p class="text-xs text-slate-600 mt-1">Dùng điểm tâm sáng tại khách sạn.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-3" data-date="2025-09-24" data-time-start="10:00" data-time-end="12:00">
+            <div class="timeline-badge bg-teal-600">10:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Sâm Chính Phủ & Mỹ Phẩm Nội Địa</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-rose-100 text-rose-800 rounded font-semibold shrink-0">Mua Sắm</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Cửa hàng Sâm chính phủ Hàn Quốc (45-60p) & Cửa hàng Mỹ phẩm nội địa.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-3" data-date="2025-09-24" data-time-start="12:30" data-time-end="13:30">
+            <div class="timeline-badge bg-teal-600">12:30</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Ăn Trưa Gà Hầm Sâm Bào Ngư</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-amber-100 text-amber-800 rounded font-semibold shrink-0">Bữa Trưa</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Thưởng thức món <strong>Gà hầm sâm bào ngư</strong> bổ dưỡng tại Baeknyeontojong.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-3" data-date="2025-09-24" data-time-start="14:00" data-time-end="15:00">
+            <div class="timeline-badge bg-teal-600">14:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Cheongsapo Daritdol Skywalk</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-sky-100 text-sky-800 rounded font-semibold shrink-0">Tham Quan</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Cầu kính <strong>Cheongsapo Skywalk</strong> vươn ra biển ngắm hải đăng đôi.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-3" data-date="2025-09-24" data-time-start="15:30" data-time-end="16:30">
+            <div class="timeline-badge bg-teal-600">15:30</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Chùa Haedong Yonggungsa</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-emerald-100 text-emerald-800 rounded font-semibold shrink-0">Điểm Hot</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Ngôi chùa vách đá hướng biển <strong>Haedong Yonggungsa</strong> nổi tiếng.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-3" data-date="2025-09-24" data-time-start="17:00" data-time-end="18:00">
+            <div class="timeline-badge bg-amber-600">17:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-amber-300 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Haeundae Sky Capsule</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-amber-100 text-amber-900 rounded font-semibold shrink-0">Đẹp Nhất</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Cabin sắc màu <strong>Sky Capsule</strong> ngắm hoàng hôn rực rỡ bãi biển Haeundae.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-3" data-date="2025-09-24" data-time-start="19:00" data-time-end="20:30">
+            <div class="timeline-badge bg-teal-600">19:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Ăn Tối Buffet Quo Quo</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-amber-100 text-amber-800 rounded font-semibold shrink-0">Bữa Tối</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Dùng cơm tối buffet quốc tế phong phú tại <strong>Quo Quo Buffet</strong>.
+              </p>
+            </div>
+          </div>
+
+          <!-- ================= DAY 4 NODE (25/09) ================= -->
+          <div class="timeline-day-node" data-day="day-4" data-date="2025-09-25">
+            <div class="timeline-badge">NGÀY 4</div>
+            <div class="bg-gradient-to-r from-emerald-900 to-teal-900 text-white p-3.5 sm:p-4 rounded-xl shadow border-l-4 border-emerald-400">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-extrabold text-emerald-300 uppercase tracking-wider">NGÀY 04 • THỨ NĂM 25/09/2025</span>
+                <span class="px-2 py-0.5 bg-emerald-500/30 text-emerald-100 rounded-full text-[10px] font-semibold">🍇 Trái Cây Tươi & BBQ</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DAY 4 EVENTS -->
+          <div class="timeline-item" data-day="day-4" data-date="2025-09-25" data-time-start="07:30" data-time-end="09:00">
+            <div class="timeline-badge bg-emerald-600">07:30</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <h4 class="font-bold text-slate-900 text-sm sm:text-base">Ăn Sáng Buffet Khách Sạn</h4>
+              <p class="text-xs text-slate-600 mt-1">Dùng bữa sáng tại khách sạn.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-4" data-date="2025-09-25" data-time-start="09:30" data-time-end="11:30">
+            <div class="timeline-badge bg-emerald-600">09:30</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm space-y-2">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Hái Nho Shine Muscat Tại Vườn</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-emerald-100 text-emerald-800 rounded font-semibold shrink-0">Tặng 1 Chùm</span>
+              </div>
+              <p class="text-xs text-slate-600">
+                Hái & tặng 1 chùm nho <strong>Shine Muscat</strong> mang về.
+              </p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs pt-1">
+                <div class="p-2 bg-amber-50 rounded-lg border border-amber-200">
+                  <span class="font-bold text-amber-900">Opt 1: Cà phê VIAGGIO</span>
+                  <p class="text-slate-600 text-[11px] mt-0.5">Sân vườn châu Âu (tự túc).</p>
+                </div>
+                <div class="p-2 bg-sky-50 rounded-lg border border-sky-200">
+                  <span class="font-bold text-sky-900">Opt 2: Nakdong Rail Bike</span>
+                  <p class="text-slate-600 text-[11px] mt-0.5">Đạp xe ven sông (8 USD/khách).</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-4" data-date="2025-09-25" data-time-start="12:00" data-time-end="13:30">
+            <div class="timeline-badge bg-emerald-600">12:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">BBQ Myeongryunjinsa Galbi</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-amber-100 text-amber-800 rounded font-semibold shrink-0">Bữa Trưa</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Buffet thịt nướng chuẩn Hàn tại <strong>Myeongryunjinsa Galbi</strong>.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item" data-day="day-4" data-date="2025-09-25" data-time-start="14:00" data-time-end="20:00">
+            <div class="timeline-badge bg-emerald-600">14:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">Mua Sắm & Ăn Đêm Seomyeon</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-purple-100 text-purple-800 rounded font-semibold shrink-0">Tự Do</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                Sắm đồ tại phố ngầm <strong>Seomyeon</strong> & tự túc bữa tối ẩm thực đường phố.
+              </p>
+            </div>
+          </div>
+
+          <!-- ================= DAY 5 NODE (26/09) ================= -->
+          <div class="timeline-day-node" data-day="day-5" data-date="2025-09-26">
+            <div class="timeline-badge">NGÀY 5</div>
+            <div class="bg-gradient-to-r from-slate-800 to-slate-950 text-white p-3.5 sm:p-4 rounded-xl shadow border-l-4 border-slate-500">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-extrabold text-slate-300 uppercase tracking-wider">NGÀY 05 • THỨ SÁU 26/09/2025</span>
+                <span class="px-2 py-0.5 bg-slate-700 text-slate-200 rounded-full text-[10px] font-semibold">✈️ Trả Phòng & Bay Về</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- DAY 5 EVENTS -->
+          <div class="timeline-item group-hn-card" data-day="day-5" data-date="2025-09-26" data-time-start="07:00" data-time-end="13:15">
+            <div class="timeline-badge bg-sky-700">07:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">🏛️ Nhóm Hà Nội - Bay VN429 Về Nội Bài</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-sky-100 text-sky-800 font-mono rounded font-bold shrink-0">11:00 - 13:15</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                07:00 ra sân bay Busan (Breakfast box). Bay VN429 (11:00-13:15) về Nội Bài. Xe đưa về ROX 54A Nguyễn Chí Thanh.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item group-sg-card" data-day="day-5" data-date="2025-09-26" data-time-start="06:00" data-time-end="12:55">
+            <div class="timeline-badge bg-emerald-700">06:00</div>
+            <div class="timeline-content bg-white p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm">
+              <div class="flex justify-between items-start gap-1">
+                <h4 class="font-bold text-slate-900 text-sm sm:text-base">🌴 Nhóm Sài Gòn - Bay VN423 Về TP.HCM</h4>
+                <span class="px-2 py-0.5 text-[10px] bg-emerald-100 text-emerald-800 font-mono rounded font-bold shrink-0">10:00 - 12:55</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1.5">
+                06:00 ra sân bay Busan (Breakfast box). Bay VN423 (10:00-12:55) về Tân Sơn Nhất. HDV chia tay đoàn.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TAB: FULL MENU & MEALS BREAKDOWN -->
+      <section id="tab-menu" class="tab-pane space-y-4 sm:space-y-6">
+        <div class="bg-gradient-to-r from-amber-600 to-orange-600 text-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-md">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <div>
+              <span class="text-amber-200 font-extrabold text-[10px] uppercase tracking-wider">MENU DỰ KIẾN BUSAN 2026</span>
+              <h3 class="text-lg sm:text-2xl font-bold text-white mt-0.5">Bảng Thực Đơn Chi Tiết 5 Ngày</h3>
+            </div>
+            <span class="px-2.5 py-0.5 bg-white/20 text-white rounded-full text-[10px] sm:text-xs font-semibold backdrop-blur-sm">
+              🍵 Trà miễn phí tất cả bữa
+            </span>
+          </div>
+        </div>
+
+        <!-- TABLE OF MEALS FROM EXCEL -->
+        <div class="table-responsive bg-white rounded-xl sm:rounded-2xl shadow-sm border border-slate-200">
+          <table class="w-full text-left text-[11px] sm:text-xs text-slate-700 min-w-[550px]">
+            <thead class="bg-slate-900 text-white uppercase text-[10px] tracking-wider font-bold">
+              <tr>
+                <th class="p-3 w-24">Ngày</th>
+                <th class="p-3">Sáng</th>
+                <th class="p-3">Trưa</th>
+                <th class="p-3">Tối</th>
+                <th class="p-3 w-40">Đồ Uống / Note</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 font-medium">
+              <tr class="hover:bg-slate-50 transition">
+                <td class="p-3 font-bold text-sky-700 bg-sky-50/50">22.09<br><span class="text-[9px] text-slate-500 font-normal">Ngày 1</span></td>
+                <td class="p-3"><strong>Gonghanggalbitang</strong><br><span class="text-slate-500 text-[10px]">(Canh sườn bò)</span></td>
+                <td class="p-3"><strong>Cá nướng</strong><br><span class="text-slate-500 text-[10px]">Dalbityegueungodeu</span></td>
+                <td class="p-3"><strong>Nakgopsae</strong><br><span class="text-slate-500 text-[10px]">Gaemijib</span></td>
+                <td class="p-3 text-slate-500 italic text-[10px]">Trà miễn phí</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition bg-amber-50/30">
+                <td class="p-3 font-bold text-amber-700 bg-amber-100/50">23.09<br><span class="text-[9px] text-amber-800 font-normal">Ngày 2</span></td>
+                <td class="p-3"><strong>Buffet khách sạn</strong></td>
+                <td class="p-3"><strong>Buffet Shabu-Shabu</strong><br><span class="text-slate-500 text-[10px]">Shabu Aejak</span></td>
+                <td class="p-3"><strong class="text-amber-900">Đại tiệc Hải sản Nayeonyine:</strong><ul class="list-disc list-inside text-[10px] text-slate-700 mt-0.5 space-y-0.5"><li>Sannakji & Gaebul</li><li>2 Tôm nướng/khách</li><li>Bánh xèo & Sashimi</li><li>Mì hải sản & Lẩu cá</li></ul></td>
+                <td class="p-3 text-amber-900 bg-amber-50 text-[10px]"><strong>Mỗi bàn 4 khách:</strong><div class="mt-0.5 font-mono">2 Soju • 4 Bia • 3 Nước ngọt</div></td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="p-3 font-bold text-teal-700 bg-teal-50/50">24.09<br><span class="text-[9px] text-slate-500 font-normal">Ngày 3</span></td>
+                <td class="p-3"><strong>Buffet khách sạn</strong></td>
+                <td class="p-3"><strong>Gà hầm sâm bào ngư</strong><br><span class="text-slate-500 text-[10px]">Baeknyeontojong</span></td>
+                <td class="p-3"><strong>Buffet Á - Âu</strong><br><span class="text-slate-500 text-[10px]">Quo Quo buffet</span></td>
+                <td class="p-3 text-slate-500 italic text-[10px]">Trà miễn phí</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="p-3 font-bold text-emerald-700 bg-emerald-50/50">25.09<br><span class="text-[9px] text-slate-500 font-normal">Ngày 4</span></td>
+                <td class="p-3"><strong>Buffet khách sạn</strong></td>
+                <td class="p-3"><strong>Buffet BBQ</strong><br><span class="text-slate-500 text-[10px]">Myeongryunjinsa Galbi</span></td>
+                <td class="p-3 text-slate-400 italic text-[10px]">Tự túc dùng bữa tối</td>
+                <td class="p-3 text-slate-500 italic text-[10px]">Trà miễn phí</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition">
+                <td class="p-3 font-bold text-slate-700 bg-slate-100/50">26.09<br><span class="text-[9px] text-slate-500 font-normal">Ngày 5</span></td>
+                <td class="p-3" colspan="3"><strong>Breakfast Box ra sân bay:</strong> Burger + Nước ép chuối + Coke.</td>
+                <td class="p-3 text-slate-500 italic text-[10px]">Mang ra sân bay</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB: TOUR INFO & PRICING & INCLUSIONS -->
+      <section id="tab-info" class="tab-pane space-y-4 sm:space-y-6">
+        <div class="bg-gradient-to-r from-sky-900 via-blue-900 to-indigo-900 text-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md border border-sky-700/40 space-y-3">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="bg-sky-400/20 text-sky-200 border border-sky-400/30 text-[10px] px-2.5 py-0.5 rounded-full font-medium">Giới Thiệu Chuyến Đi</span>
+            <span class="bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 text-[10px] px-2.5 py-0.5 rounded-full font-medium">Khách sạn 4★ Haeundae Blue Story</span>
+          </div>
+          <h3 class="text-lg sm:text-2xl font-extrabold text-white">Chương Trình Tham Quan Busan 5N5Đ - Sắc Việt Travel</h3>
+          <p class="text-xs text-sky-100/90 leading-relaxed">
+            Hành trình trọn gói khám phá thành phố biển Busan: Làng bích họa Gamcheon, Haeundae Sky Capsule ngắm hoàng hôn, Trải nghiệm Running Man, Tiệc BBQ Hải sản tươi sống ven biển Nayeonyine và tự do mua sắm Seomyeon.
+          </p>
+        </div>
+
+        <!-- PRICING CARDS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div class="bg-gradient-to-br from-sky-900 to-blue-900 text-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-md space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="text-[10px] uppercase tracking-wider font-bold text-sky-300">🏛️ Nhóm Hà Nội</span>
+              <span class="px-2 py-0.5 bg-sky-400/20 text-sky-200 text-[10px] rounded border border-sky-300/30">VN428 / VN429</span>
+            </div>
+            <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono">
+              36.040.000 <span class="text-xs text-sky-200 font-sans font-normal">VNĐ / Khách</span>
+            </div>
+            <p class="text-[11px] text-sky-100/80">Khách sạn 4★ trung tâm, xe đón tiễn Hà Nội – Nội Bài (ROX 54A Nguyễn Chí Thanh lúc 21:00).</p>
+          </div>
+
+          <div class="bg-gradient-to-br from-emerald-900 to-teal-900 text-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-md space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="text-[10px] uppercase tracking-wider font-bold text-emerald-300">🌴 Nhóm Sài Gòn</span>
+              <span class="px-2 py-0.5 bg-emerald-400/20 text-emerald-200 text-[10px] rounded border border-emerald-300/30">VN422 / VN423</span>
+            </div>
+            <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono">
+              35.940.000 <span class="text-xs text-emerald-200 font-sans font-normal">VNĐ / Khách</span>
+            </div>
+            <p class="text-[11px] text-emerald-100/80">Khách sạn 4★ trung tâm, tập trung Cột 10 Lầu 2 Tân Sơn Nhất lúc 22:00.</p>
+          </div>
+        </div>
+
+        <!-- CHILD PRICING POLICY -->
+        <div class="bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-slate-200 shadow-sm space-y-2.5">
+          <h4 class="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
+            <i data-lucide="baby" class="w-4 h-4 text-sky-600"></i>
+            <span>Giá Vé Trẻ Em</span>
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="font-bold text-slate-800">Dưới 2 tuổi</span>
+              <div class="text-sky-600 font-bold text-xs sm:text-sm mt-0.5">10% Giá Tour</div>
+              <p class="text-slate-500 text-[10px]">Ngủ chung giường với bố mẹ</p>
+            </div>
+            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="font-bold text-slate-800">2 đến 11 tuổi</span>
+              <div class="text-sky-600 font-bold text-xs sm:text-sm mt-0.5">75% Giá Tour</div>
+              <p class="text-slate-500 text-[10px]">Ngủ chung giường với bố mẹ</p>
+            </div>
+            <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="font-bold text-slate-800">Từ 12 tuổi trở lên</span>
+              <div class="text-sky-600 font-bold text-xs sm:text-sm mt-0.5">100% Giá Tour</div>
+              <p class="text-slate-500 text-[10px]">Tiêu chuẩn giường riêng</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- INCLUDED VS EXCLUDED -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div class="bg-emerald-50/50 p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-emerald-200 space-y-2.5">
+            <h4 class="font-extrabold text-emerald-900 text-xs sm:text-base flex items-center gap-1.5">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+              <span>GIÁ TOUR BAO GỒM</span>
+            </h4>
+            <ul class="space-y-1.5 text-[11px] sm:text-xs text-slate-700">
+              <li class="flex items-start gap-1.5"><span class="text-emerald-600 font-bold">✓</span><span>Vé máy bay khứ hồi Vietnam Airlines (Sài Gòn/Hà Nội - Busan).</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-emerald-600 font-bold">✓</span><span>Xe đón tiễn Hà Nội – Nội Bài & xe di chuyển theo chương trình.</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-emerald-600 font-bold">✓</span><span>Khách sạn 4★ trung tâm gần biển HAEUNDAE BLUE STORY HOTEL (2 khách/phòng).</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-emerald-600 font-bold">✓</span><span>Trưởng đoàn & HDV suốt tuyến từ Việt Nam.</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-emerald-600 font-bold">✓</span><span>Visa đoàn nhập cảnh Hàn Quốc.</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-emerald-600 font-bold">✓</span><span>Các bữa ăn tiêu chuẩn + Tiệc hải sản Nayeonyine (kèm Soju & Bia).</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-emerald-600 font-bold">✓</span><span>Vé tham quan các điểm trong chương trình (Sky Capsule, Running Man...).</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-emerald-600 font-bold">✓</span><span>Nước suối 1 chai 500ml/người/ngày + Bảo hiểm du lịch $50.000.</span></li>
+            </ul>
+          </div>
+
+          <div class="bg-rose-50/50 p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-rose-200 space-y-2.5">
+            <h4 class="font-extrabold text-rose-900 text-xs sm:text-base flex items-center gap-1.5">
+              <i data-lucide="x-circle" class="w-4 h-4 text-rose-600"></i>
+              <span>GIÁ TOUR CHƯA BAO GỒM</span>
+            </h4>
+            <ul class="space-y-1.5 text-[11px] sm:text-xs text-slate-700">
+              <li class="flex items-start gap-1.5"><span class="text-rose-600 font-bold">✕</span><span>Tiền tips HDV & tài xế địa phương.</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-rose-600 font-bold">✕</span><span>Phí hộ chiếu, visa tái nhập (khách nước ngoài), phụ thu phòng đơn.</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-rose-600 font-bold">✕</span><span>Chi phí cá nhân (hành lý quá cước, giặt ủi, đồ uống ngoài menu).</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-rose-600 font-bold">✕</span><span>Các trải nghiệm tự chọn (Sauna Spa Land, Railbike 8 USD, Cà phê Viaggio...).</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-rose-600 font-bold">✕</span><span>Bữa tối tự túc ngày 4 tại Seomyeon.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- MOBILE BOTTOM FLOATING NAVBAR -->
+  <div class="fixed bottom-0 left-0 right-0 bg-slate-950/95 backdrop-blur-lg border-t border-slate-800 text-white z-50 md:hidden py-1.5 px-3">
+    <div class="flex justify-around items-center text-center">
+      <button class="mobile-nav-btn" data-target="live-hero">
+        <i data-lucide="zap" class="w-4 h-4 mx-auto text-amber-400"></i>
+        <span class="text-[9px] mt-0.5 block text-amber-300 font-bold">Bây Giờ</span>
+      </button>
+      <button class="mobile-nav-btn active" data-target="tab-all">
+        <i data-lucide="route" class="w-4 h-4 mx-auto"></i>
+        <span class="text-[9px] mt-0.5 block">Lịch Trình</span>
+      </button>
+      <button class="mobile-nav-btn text-amber-400" data-target="tab-menu">
+        <i data-lucide="utensils" class="w-4 h-4 mx-auto"></i>
+        <span class="text-[9px] mt-0.5 block">Thực Đơn</span>
+      </button>
+      <button class="mobile-nav-btn" data-target="tab-info">
+        <i data-lucide="info" class="w-4 h-4 mx-auto"></i>
+        <span class="text-[9px] mt-0.5 block">Giá Tour</span>
+      </button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>
