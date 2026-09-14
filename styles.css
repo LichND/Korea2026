@@ -141,21 +141,20 @@ html {
 }
 
 /* Past Item & Day Node Collapsed State */
-.timeline-item.past-item-collapsed,
-.timeline-day-node.past-item-collapsed {
+.past-item-collapsed {
   display: none !important;
 }
 
-.timeline-item.past-item-expanded,
-.timeline-day-node.past-item-expanded {
+.past-item-expanded {
   display: block !important;
   opacity: 0.88;
   animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.timeline-item.most-recent-past .timeline-content {
-  border-left: 4px solid #64748b;
-  background-color: #f8fafc;
+.timeline-item.most-recent-past .timeline-content,
+[data-meal-type].most-recent-past {
+  border-left: 4px solid #64748b !important;
+  background-color: #f8fafc !important;
 }
 
 .timeline-item.most-recent-past .timeline-badge {

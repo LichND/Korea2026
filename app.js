@@ -32,6 +32,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const mealTodayLunch = document.getElementById('meal-today-lunch');
   const mealTodayDinner = document.getElementById('meal-today-dinner');
 
+  // Countdown Elements
+  const preTripCountdown = document.getElementById('pre-trip-countdown');
+  const cdDays = document.getElementById('cd-days');
+  const cdHours = document.getElementById('cd-hours');
+  const cdMins = document.getElementById('cd-mins');
+  const cdSecs = document.getElementById('cd-secs');
+
+  // Meal Quick Jump Elements
+  const btnMealBf = document.getElementById('btn-hero-meal-bf');
+  const btnMealLunch = document.getElementById('btn-hero-meal-lunch');
+  const btnMealDinner = document.getElementById('btn-hero-meal-dinner');
+  let currentActiveMealDay = '09-22';
+
   // Daily Meal Database from Excel
   const mealsDb = {
     '09-21': { bf: 'Nghỉ đêm máy bay', lunch: 'N/A', dinner: 'Tập trung ra sân bay' },
@@ -73,13 +86,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (simDaySelect.value !== 'real') {
       isSimulated = true;
-      const [year, month, day] = simDaySelect.value.split('-');
-      const [hours, minutes] = simTimeInput.value.split(':');
-      currentSimDate = new Date(year, month - 1, day, hours, minutes);
+      const [year, month, day] = simDaySelect.value.split('-').map(Number);
+      const [hours, minutes] = simTimeInput.value.split(':').map(Number);
+      currentSimDate = new Date(year, month - 1, day, hours, minutes, 0);
     } else {
-      currentSimDate = new Date(); // Actual current time
+      currentSimDate = new Date(); // Actual current browser time (includes live seconds!)
     }
 
+    const currentTs = currentSimDate.getTime();
+    const refYear = currentSimDate.getFullYear();
+
+    // Key Tour Milestones in Timestamps (21/09 21:00 to 26/09 23:59:59)
+    const departureTs = new Date(refYear, 8, 21, 21, 0, 0).getTime();
+    const tourEndTs = new Date(refYear, 8, 26, 23, 59, 59).getTime();
+
+    const simMonth = String(currentSimDate.getMonth() + 1).padStart(2, '0');
+    const simDay = String(currentSimDate.getDate()).padStart(2, '0');
+    const monthDayKey = `${simMonth}-${simDay}`;
     const simHours = String(currentSimDate.getHours()).padStart(2, '0');
     const simMins = String(currentSimDate.getMinutes()).padStart(2, '0');
     const currentTimeMinutes = currentSimDate.getHours() * 60 + currentSimDate.getMinutes();
@@ -87,32 +110,105 @@ document.addEventListener('DOMContentLoaded', () => {
     // Clear active status on all timeline items
     document.querySelectorAll('#continuous-timeline .timeline-item').forEach(el => el.classList.remove('active-live'));
 
-    // Schedule matrix lookup (Month 09, Days 21 to 26)
-    const dayMap = {
-      '09-21': { name: 'Đêm 01 (21/09/2025)', tabId: 'tab-day-0', dateStr: '2025-09-21' },
-      '09-22': { name: 'Ngày 01 (22/09/2025)', tabId: 'tab-day-1', dateStr: '2025-09-22' },
-      '09-23': { name: 'Ngày 02 (23/09/2025)', tabId: 'tab-day-2', dateStr: '2025-09-23' },
-      '09-24': { name: 'Ngày 03 (24/09/2025)', tabId: 'tab-day-3', dateStr: '2025-09-24' },
-      '09-25': { name: 'Ngày 04 (25/09/2025)', tabId: 'tab-day-4', dateStr: '2025-09-25' },
-      '09-26': { name: 'Ngày 05 (26/09/2025)', tabId: 'tab-day-5', dateStr: '2025-09-26' }
-    };
+    // CASE A: BEFORE TRIP (currentTs < departureTs)
+    if (currentTs < departureTs) {
+      if (preTripCountdown) preTripCountdown.classList.remove('hidden');
 
-    const monthDayKey = `${String(currentSimDate.getMonth() + 1).padStart(2, '0')}-${String(currentSimDate.getDate()).padStart(2, '0')}`;
+      // Live countdown calculation in milliseconds
+      const diffMs = departureTs - currentTs;
 
-    let currentDayInfo = dayMap[monthDayKey];
-    if (!currentDayInfo) {
-      currentDayInfo = dayMap['09-22'];
+      if (diffMs > 0) {
+        const cdD = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const cdH = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+        const cdM = Math.floor((diffMs / (1000 * 60)) % 60);
+        const cdS = Math.floor((diffMs / 1000) % 60);
+
+        if (cdDays) cdDays.textContent = String(cdD).padStart(2, '0');
+        if (cdHours) cdHours.textContent = String(cdH).padStart(2, '0');
+        if (cdMins) cdMins.textContent = String(cdM).padStart(2, '0');
+        if (cdSecs) cdSecs.textContent = String(cdS).padStart(2, '0');
+      } else {
+        if (cdDays) cdDays.textContent = '00';
+        if (cdHours) cdHours.textContent = '00';
+        if (cdMins) cdMins.textContent = '00';
+        if (cdSecs) cdSecs.textContent = '00';
+      }
+
+      if (heroNowDay) heroNowDay.innerHTML = `<span>✈️</span> Chuyến đi sắp khởi hành (21/09 - 26/09)`;
+      if (heroNowTitle) heroNowTitle.textContent = `Chương Trình Tham Quan Busan 5N5Đ`;
+      if (heroNowDesc) heroNowDesc.textContent = `Chuyến đi chuẩn bị diễn ra. Bạn đang ở chế độ xem Full Lịch Trình 5N5Đ. Chọn một ngày trong bộ "Giả lập" ở góc trên để trải nghiệm thời gian thực!`;
+      if (heroNowTag) heroNowTag.textContent = `Sắp diễn ra`;
+
+      if (heroNextTitle) heroNextTitle.textContent = `Đêm 1 (21/09) • Khởi hành đi Busan`;
+      if (heroNextDesc) heroNextDesc.textContent = `21:00 HN đón tại ROX 54A Nguyễn Chí Thanh / 22:00 SG đón tại Cột 10 Tân Sơn Nhất.`;
+      if (heroNextTime) heroNextTime.textContent = `21/09`;
+
+      liveStatusBadge.textContent = `✈️ Sắp khởi hành: Chuyến đi Busan diễn ra từ 21/09 đến 26/09`;
+      liveStatusBadge.className = "px-2 py-0.5 rounded text-white font-bold bg-sky-600 text-[10px] sm:text-xs truncate max-w-full";
+
+      const activeMeals = mealsDb['09-22'];
+      currentActiveMealDay = '09-22';
+      if (mealTodayBf) mealTodayBf.textContent = activeMeals.bf;
+      if (mealTodayLunch) mealTodayLunch.textContent = activeMeals.lunch;
+      if (mealTodayDinner) mealTodayDinner.textContent = activeMeals.dinner;
+
+      updateContinuousPastCollapse('BEFORE_TRIP');
+      updateMealPastCollapse('BEFORE_TRIP');
+      return;
     }
 
-    // Find active & next items in continuous timeline
+    // Hide pre-trip countdown when trip is ongoing or completed
+    if (preTripCountdown) preTripCountdown.classList.add('hidden');
+
+    // CASE B: AFTER TRIP (currentTs > tourEndTs)
+    if (currentTs > tourEndTs) {
+      if (heroNowDay) heroNowDay.innerHTML = `<span>🏁</span> Chuyến đi đã hoàn thành (26/09)`;
+      if (heroNowTitle) heroNowTitle.textContent = `Chuyến Đi Busan 5N5Đ Đã Kết Thúc Tốt Đẹp`;
+      if (heroNowDesc) heroNowDesc.textContent = `Đoàn đã đáp chuyến bay về đến Việt Nam an toàn. Cảm ơn quý khách đã đồng hành cùng Sắc Việt Travel!`;
+      if (heroNowTag) heroNowTag.textContent = `Đã hoàn thành`;
+
+      if (heroNextTitle) heroNextTitle.textContent = `Xem lại kỷ niệm & thực đơn 5 ngày`;
+      if (heroNextDesc) heroNextDesc.textContent = `Bấm nút bên dưới để mở lại toàn bộ lịch trình quá khứ hoặc xem bảng thực đơn.`;
+      if (heroNextTime) heroNextTime.textContent = `Hoàn thành`;
+
+      liveStatusBadge.textContent = `🏁 Chuyến đi Busan 5N5Đ đã hoàn thành thành công tốt đẹp!`;
+      liveStatusBadge.className = "px-2 py-0.5 rounded text-white font-bold bg-emerald-600 text-[10px] sm:text-xs truncate max-w-full";
+
+      const activeMeals = mealsDb['09-26'];
+      currentActiveMealDay = '09-26';
+      if (mealTodayBf) mealTodayBf.textContent = activeMeals.bf;
+      if (mealTodayLunch) mealTodayLunch.textContent = activeMeals.lunch;
+      if (mealTodayDinner) mealTodayDinner.textContent = activeMeals.dinner;
+
+      updateContinuousPastCollapse('AFTER_TRIP', currentTs, refYear);
+      updateMealPastCollapse('AFTER_TRIP', currentTs, refYear);
+      return;
+    }
+
+    // CASE C: DURING TRIP (departureTs <= currentTs && currentTs <= tourEndTs)
+    const dayMap = {
+      '09-21': { name: 'Đêm 01 (21/09/2025)', dateStr: `${refYear}-09-21` },
+      '09-22': { name: 'Ngày 01 (22/09/2025)', dateStr: `${refYear}-09-22` },
+      '09-23': { name: 'Ngày 02 (23/09/2025)', dateStr: `${refYear}-09-23` },
+      '09-24': { name: 'Ngày 03 (24/09/2025)', dateStr: `${refYear}-09-24` },
+      '09-25': { name: 'Ngày 04 (25/09/2025)', dateStr: `${refYear}-09-25` },
+      '09-26': { name: 'Ngày 05 (26/09/2025)', dateStr: `${refYear}-09-26` }
+    };
+    let currentDayInfo = dayMap[monthDayKey] || dayMap['09-22'];
+
     const timelineContainer = document.getElementById('continuous-timeline');
     let activeItem = null;
     let nextItem = null;
 
     if (timelineContainer) {
-      const items = Array.from(timelineContainer.querySelectorAll('.timeline-item[data-date="' + currentDayInfo.dateStr + '"]'));
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
+      const items = Array.from(timelineContainer.querySelectorAll('.timeline-item'));
+      const dayItems = items.filter(item => {
+        const itemDate = item.getAttribute('data-date');
+        return itemDate && itemDate.endsWith(monthDayKey);
+      });
+
+      for (let i = 0; i < dayItems.length; i++) {
+        const item = dayItems[i];
         const start = item.getAttribute('data-time-start');
         const end = item.getAttribute('data-time-end');
 
@@ -128,8 +224,8 @@ document.addEventListener('DOMContentLoaded', () => {
           if (currentTimeMinutes >= startMins && currentTimeMinutes < endMins) {
             activeItem = item;
             item.classList.add('active-live');
-            if (i + 1 < items.length) {
-              nextItem = items[i + 1];
+            if (i + 1 < dayItems.length) {
+              nextItem = dayItems[i + 1];
             }
             break;
           } else if (startMins > currentTimeMinutes && !nextItem) {
@@ -139,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // --- UPDATE HERO DASHBOARD ---
+    // --- UPDATE HERO DASHBOARD FOR DURING TRIP ---
     if (heroNowDay) heroNowDay.innerHTML = `<span>🗓️</span> ${currentDayInfo.name}`;
 
     if (activeItem) {
@@ -177,66 +273,25 @@ document.addEventListener('DOMContentLoaded', () => {
       if (heroNextTime) heroNextTime.textContent = `Tối`;
     }
 
-    // --- UPDATE TODAY MEALS ROW ---
     const activeMeals = mealsDb[monthDayKey] || mealsDb['09-22'];
+    currentActiveMealDay = mealsDb[monthDayKey] ? monthDayKey : '09-22';
     if (mealTodayBf) mealTodayBf.textContent = activeMeals.bf;
     if (mealTodayLunch) mealTodayLunch.textContent = activeMeals.lunch;
     if (mealTodayDinner) mealTodayDinner.textContent = activeMeals.dinner;
 
-    // --- CONTINUOUS TIMELINE PAST COLLAPSE ---
-    updateContinuousPastCollapse(currentSimDate, isSimulated);
+    updateContinuousPastCollapse('DURING_TRIP', currentTs, refYear);
+    updateMealPastCollapse('DURING_TRIP', currentTs, refYear);
   }
 
-  // --- 3. UNIFIED CONTINUOUS TIMELINE COLLAPSE ---
-  function updateContinuousPastCollapse(refDate, isSimulated) {
-    const refYear = refDate.getFullYear();
-    const refMonth = String(refDate.getMonth() + 1).padStart(2, '0');
-    const refDay = String(refDate.getDate()).padStart(2, '0');
-    const refDateStr = `${refYear}-${refMonth}-${refDay}`;
-    const refMinutes = refDate.getHours() * 60 + refDate.getMinutes();
-
-    let activeRefDateStr = refDateStr;
-    let activeRefMinutes = refMinutes;
-    if (!isSimulated && (refDateStr < '2025-09-21' || refDateStr > '2025-09-26')) {
-      activeRefDateStr = '2025-09-22';
-      activeRefMinutes = 16 * 60;
-    }
-
+  // --- 3. UNIFIED CONTINUOUS TIMELINE COLLAPSE LOGIC ---
+  function updateContinuousPastCollapse(mode, currentTs, refYear) {
     const timelineContainer = document.getElementById('continuous-timeline');
     if (!timelineContainer) return;
 
     const allNodes = Array.from(timelineContainer.querySelectorAll('.timeline-item, .timeline-day-node'));
     if (allNodes.length === 0) return;
 
-    let pastNodes = [];
-    allNodes.forEach(node => {
-      const nodeDate = node.getAttribute('data-date');
-      if (!nodeDate) return;
-
-      if (nodeDate < activeRefDateStr) {
-        pastNodes.push(node);
-      } else if (nodeDate === activeRefDateStr) {
-        if (node.classList.contains('timeline-day-node')) {
-          pastNodes.push(node);
-        } else {
-          const start = node.getAttribute('data-time-start');
-          const end = node.getAttribute('data-time-end');
-          if (start) {
-            const [sH, sM] = start.split(':').map(Number);
-            const startMins = sH * 60 + sM;
-            let endMins = startMins + 120;
-            if (end) {
-              const [eH, eM] = end.split(':').map(Number);
-              endMins = eH * 60 + eM;
-            }
-            if (endMins <= activeRefMinutes && !node.classList.contains('active-live')) {
-              pastNodes.push(node);
-            }
-          }
-        }
-      }
-    });
-
+    // Reset visibility of all nodes & cleanup
     const existingToggle = timelineContainer.querySelector('.past-toggle-bar');
     if (existingToggle) existingToggle.remove();
 
@@ -245,6 +300,42 @@ document.addEventListener('DOMContentLoaded', () => {
       const badge = node.querySelector('.past-recent-tag');
       if (badge) badge.remove();
     });
+
+    if (mode === 'BEFORE_TRIP') {
+      return;
+    }
+
+    let pastNodes = [];
+    if (mode === 'AFTER_TRIP') {
+      pastNodes = allNodes;
+    } else if (mode === 'DURING_TRIP') {
+      allNodes.forEach(node => {
+        const nodeDateStr = node.getAttribute('data-date');
+        if (!nodeDateStr) return;
+
+        const [, m, d] = nodeDateStr.split('-').map(Number);
+        if (node.classList.contains('timeline-day-node')) {
+          const nodeEndTs = new Date(refYear, m - 1, d, 23, 59, 59).getTime();
+          if (nodeEndTs < currentTs) {
+            pastNodes.push(node);
+          }
+        } else {
+          const start = node.getAttribute('data-time-start');
+          const end = node.getAttribute('data-time-end');
+          if (start) {
+            const [sH, sM] = start.split(':').map(Number);
+            let eH = sH + 2, eM = sM;
+            if (end) {
+              [eH, eM] = end.split(':').map(Number);
+            }
+            const itemEndTs = new Date(refYear, m - 1, d, eH, eM, 0).getTime();
+            if (itemEndTs <= currentTs && !node.classList.contains('active-live')) {
+              pastNodes.push(node);
+            }
+          }
+        }
+      });
+    }
 
     const pastItemsOnly = pastNodes.filter(n => n.classList.contains('timeline-item'));
 
@@ -303,6 +394,143 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const firstOlder = olderPastNodes[0];
         firstOlder.parentNode.insertBefore(toggleBar, firstOlder);
+      }
+    }
+  }
+
+  // --- 3.5 UNIFIED MEAL PAST COLLAPSE LOGIC ---
+  let globalIsMealPastExpanded = false;
+
+  function updateMealPastCollapse(mode, currentTs, refYear) {
+    const menuSection = document.getElementById('tab-menu');
+    if (!menuSection) return;
+
+    const existingToggle = menuSection.querySelector('.meal-past-toggle-bar');
+    if (existingToggle) existingToggle.remove();
+
+    const allDayContainers = Array.from(menuSection.querySelectorAll('[data-meal-day]'));
+    const allMealCards = Array.from(menuSection.querySelectorAll('[data-meal-type]'));
+
+    // Reset styles and badges
+    allMealCards.forEach(card => {
+      card.classList.remove('past-item-collapsed', 'past-item-expanded', 'most-recent-past');
+      const badge = card.querySelector('.past-recent-tag');
+      if (badge) badge.remove();
+    });
+
+    allDayContainers.forEach(container => {
+      container.classList.remove('past-item-collapsed', 'past-item-expanded');
+    });
+
+    if (mode === 'BEFORE_TRIP') {
+      return;
+    }
+
+    let pastMealCards = [];
+    let fullyPastDayContainers = [];
+
+    allDayContainers.forEach(container => {
+      const dayStr = container.getAttribute('data-meal-day');
+      const parts = dayStr.split('-').map(Number);
+      const m = parts.length === 3 ? parts[1] : parts[0];
+      const d = parts.length === 3 ? parts[2] : parts[1];
+      const cardsInDay = Array.from(container.querySelectorAll('[data-meal-type]'));
+      let pastCardsCount = 0;
+
+      cardsInDay.forEach(card => {
+        const mealType = card.getAttribute('data-meal-type');
+        let eH = 23, eM = 59, eS = 59;
+        // User time windows: Breakfast (00:00-10:00), Lunch (10:00-15:00), Dinner (15:00-23:59:59)
+        if (mealType === 'bf') { eH = 10; eM = 0; eS = 0; }
+        else if (mealType === 'lunch') { eH = 15; eM = 0; eS = 0; }
+        else if (mealType === 'dinner') { eH = 23; eM = 59; eS = 59; }
+
+        const mealEndTs = new Date(refYear, m - 1, d, eH, eM, eS).getTime();
+        if (mode === 'AFTER_TRIP' || mealEndTs <= currentTs) {
+          pastMealCards.push(card);
+          pastCardsCount++;
+        }
+      });
+
+      const dayEndTs = new Date(refYear, m - 1, d, 23, 59, 59).getTime();
+      if (mode === 'AFTER_TRIP' || (dayEndTs <= currentTs && pastCardsCount === cardsInDay.length)) {
+        fullyPastDayContainers.push(container);
+      }
+    });
+
+    if (pastMealCards.length > 0) {
+      const mostRecentPast = pastMealCards[pastMealCards.length - 1];
+      mostRecentPast.classList.add('most-recent-past');
+
+      const badgeSpan = document.createElement('span');
+      badgeSpan.className = 'past-recent-tag px-1.5 py-0.5 text-[9px] bg-slate-200 text-slate-700 font-bold rounded flex items-center gap-1 border border-slate-300 ml-auto shrink-0';
+      badgeSpan.innerHTML = `<span>⏮️ Bữa vừa qua</span>`;
+      const header = mostRecentPast.querySelector('.flex.items-center.justify-between') || mostRecentPast;
+      header.appendChild(badgeSpan);
+
+      const mostRecentIndex = pastMealCards.indexOf(mostRecentPast);
+      const olderPastCards = pastMealCards.slice(0, mostRecentIndex);
+      const olderDayContainers = fullyPastDayContainers.filter(container => !container.contains(mostRecentPast));
+
+      if (olderPastCards.length > 0) {
+        olderPastCards.forEach(c => c.classList.add('past-item-collapsed'));
+        olderDayContainers.forEach(dc => dc.classList.add('past-item-collapsed'));
+
+        const toggleBar = document.createElement('div');
+        toggleBar.className = 'meal-past-toggle-bar my-3 p-3 bg-amber-50/90 hover:bg-amber-100/90 border border-amber-200/80 rounded-xl text-xs font-semibold text-amber-900 flex items-center justify-between cursor-pointer transition shadow-sm select-none';
+        toggleBar.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="p-1 bg-amber-200/80 rounded text-amber-900">📁</span>
+            <span>Đã thu gọn <strong>${olderPastCards.length}</strong> bữa ăn & ngày thực đơn quá khứ</span>
+          </div>
+          <span class="text-amber-800 font-bold flex items-center gap-1 hover:underline shrink-0">
+            <span class="toggle-label">${globalIsMealPastExpanded ? 'Thu gọn' : `Mở ra xem lại (${olderPastCards.length})`}</span>
+            <span class="toggle-icon transition-transform font-bold" style="transform: ${globalIsMealPastExpanded ? 'rotate(180deg)' : 'rotate(0deg)'}">▼</span>
+          </span>
+        `;
+
+        if (globalIsMealPastExpanded) {
+          olderPastCards.forEach(c => {
+            c.classList.remove('past-item-collapsed');
+            c.classList.add('past-item-expanded');
+          });
+          olderDayContainers.forEach(dc => {
+            dc.classList.remove('past-item-collapsed');
+            dc.classList.add('past-item-expanded');
+          });
+        }
+
+        toggleBar.addEventListener('click', () => {
+          globalIsMealPastExpanded = !globalIsMealPastExpanded;
+          olderPastCards.forEach(c => {
+            if (globalIsMealPastExpanded) {
+              c.classList.remove('past-item-collapsed');
+              c.classList.add('past-item-expanded');
+            } else {
+              c.classList.add('past-item-collapsed');
+              c.classList.remove('past-item-expanded');
+            }
+          });
+          olderDayContainers.forEach(dc => {
+            if (globalIsMealPastExpanded) {
+              dc.classList.remove('past-item-collapsed');
+              dc.classList.add('past-item-expanded');
+            } else {
+              dc.classList.add('past-item-collapsed');
+              dc.classList.remove('past-item-expanded');
+            }
+          });
+
+          const label = toggleBar.querySelector('.toggle-label');
+          const icon = toggleBar.querySelector('.toggle-icon');
+          if (label) label.textContent = globalIsMealPastExpanded ? 'Thu gọn' : `Mở ra xem lại (${olderPastCards.length})`;
+          if (icon) icon.style.transform = globalIsMealPastExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+        });
+
+        const firstTarget = olderDayContainers.length > 0 ? olderDayContainers[0] : olderPastCards[0];
+        if (firstTarget && firstTarget.parentNode) {
+          firstTarget.parentNode.insertBefore(toggleBar, firstTarget);
+        }
       }
     }
   }
@@ -369,7 +597,7 @@ document.addEventListener('DOMContentLoaded', () => {
         infoSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     } else {
-      // Timeline tabs (tab-all, tab-day-0 ... tab-day-5)
+      // Timeline tabs
       tabPanes.forEach(pane => {
         if (pane.id === 'tab-timeline-main') {
           pane.classList.add('active-pane');
@@ -449,9 +677,89 @@ document.addEventListener('DOMContentLoaded', () => {
   groupBtnHn.addEventListener('click', () => filterGroup('hn'));
   groupBtnSg.addEventListener('click', () => filterGroup('sg'));
 
+  // --- 6. MEAL QUICK JUMP TO TIMELINE CARD ---
+  function jumpToMeal(mealType) {
+    handleTabClick('tab-menu');
+
+    setTimeout(() => {
+      let targetCard = document.querySelector(`[data-meal-day="${currentActiveMealDay}"] [data-meal-type="${mealType}"]`);
+
+      if (targetCard && (targetCard.classList.contains('past-item-collapsed') || targetCard.closest('.past-item-collapsed'))) {
+        globalIsMealPastExpanded = true;
+        evaluateTripSync();
+      }
+
+      setTimeout(() => {
+        if (!targetCard) {
+          targetCard = document.querySelector(`[data-meal-day="${currentActiveMealDay}"]`);
+        }
+        if (!targetCard) {
+          targetCard = document.querySelector('[data-meal-day="09-22"]');
+        }
+
+        if (targetCard) {
+          targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          targetCard.classList.add('ring-4', 'ring-amber-400', 'transition-all', 'duration-300');
+          setTimeout(() => {
+            targetCard.classList.remove('ring-4', 'ring-amber-400');
+          }, 1800);
+        }
+      }, 100);
+    }, 150);
+  }
+
+  if (btnMealBf) btnMealBf.addEventListener('click', (e) => { e.stopPropagation(); jumpToMeal('bf'); });
+  if (btnMealLunch) btnMealLunch.addEventListener('click', (e) => { e.stopPropagation(); jumpToMeal('lunch'); });
+  if (btnMealDinner) btnMealDinner.addEventListener('click', (e) => { e.stopPropagation(); jumpToMeal('dinner'); });
+
+  window.jumpToMeal = jumpToMeal;
+
   // SIMULATOR CHANGE LISTENERS
-  simDaySelect.addEventListener('change', evaluateTripSync);
-  simTimeInput.addEventListener('input', evaluateTripSync);
+  if (simDaySelect) simDaySelect.addEventListener('change', evaluateTripSync);
+  if (simTimeInput) simTimeInput.addEventListener('input', evaluateTripSync);
+
+  // --- 7. CHEAT CODE: CLICK LOCAL CLOCK 5 TIMES TO TOGGLE TIME SIMULATOR ---
+  const clockLocalWrapper = document.getElementById('clock-local-wrapper') || clockLocal;
+  const simControlContainer = document.getElementById('sim-control-container');
+  let clickCount = 0;
+  let clickResetTimer = null;
+
+  function showToast(message) {
+    let toast = document.getElementById('cheat-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'cheat-toast';
+      toast.className = 'fixed top-4 left-1/2 -translate-x-1/2 bg-slate-900/95 text-amber-300 border border-amber-500/40 text-xs font-semibold px-4 py-2 rounded-full shadow-2xl z-50 transition-all duration-300 transform scale-95 opacity-0 pointer-events-none flex items-center gap-2';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.classList.remove('scale-95', 'opacity-0');
+    toast.classList.add('scale-100', 'opacity-100');
+
+    setTimeout(() => {
+      toast.classList.remove('scale-100', 'opacity-100');
+      toast.classList.add('scale-95', 'opacity-0');
+    }, 2200);
+  }
+
+  if (clockLocalWrapper) {
+    clockLocalWrapper.addEventListener('click', () => {
+      clickCount++;
+      if (clickResetTimer) clearTimeout(clickResetTimer);
+
+      if (clickCount >= 5) {
+        clickCount = 0;
+        if (simControlContainer) {
+          const isHidden = simControlContainer.classList.toggle('hidden');
+          showToast(isHidden ? '🔒 Đã ẩn bộ giả lập thời gian' : '🔓 Đã kích hoạt bộ giả lập thời gian!');
+        }
+      } else {
+        clickResetTimer = setTimeout(() => {
+          clickCount = 0;
+        }, 1200);
+      }
+    });
+  }
 
   // START CLOCK TICKER
   updateClocks();
