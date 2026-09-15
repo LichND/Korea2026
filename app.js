@@ -48,9 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Daily Meal Database from Excel
   const mealsDb = {
     '09-21': { bf: 'Nghỉ đêm máy bay', lunch: 'N/A', dinner: 'Tập trung ra sân bay' },
-    '09-22': { bf: 'Canh sườn bò (Gonghanggalbitang)', lunch: 'Cá nướng Dalbityegueungodeu', dinner: 'Nakgopsae Gaemijib' },
-    '09-23': { bf: 'Buffet khách sạn', lunch: 'Buffet lẩu Shabu-Shabu', dinner: 'Đại tiệc Hải Sản Nayeonyine (+Soju, Bia)' },
-    '09-24': { bf: 'Buffet khách sạn', lunch: 'Gà hầm sâm bào ngư', dinner: 'Buffet Á-Âu Quo Quo' },
+    '09-22': { bf: 'Canh sườn bò (Gonghanggalbitang)', lunch: 'Cá nướng Dalbityegueungodeu', dinner: 'Đại tiệc Hải Sản Nayeonyine (+Soju, Bia)' },
+    '09-23': { bf: 'Buffet khách sạn', lunch: 'Buffet lẩu Shabu-Shabu', dinner: 'Buffet Đặc Biệt Grand Apple (Tiệc Sinh Nhật ZPS)' },
+    '09-24': { bf: 'Buffet khách sạn', lunch: 'Gà hầm sâm bào ngư', dinner: 'Lẩu Nakgopsae Gaemijib' },
     '09-25': { bf: 'Buffet khách sạn', lunch: 'BBQ Myeongryunjinsa Galbi', dinner: 'Tự túc dùng bữa tối (Seomyeon)' },
     '09-26': { bf: 'Breakfast Box (Burger & Juice)', lunch: 'Bay về Việt Nam', dinner: 'Kết thúc chuyến đi' }
   };
